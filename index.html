@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Image Parser</title>
+</head>
+<body>
+
+<h2>Upload an image to parse</h2>
+
+<input type="file" id="imgInput">
+<button onclick="uploadImage()">Upload</button>
+
+<p><b>Result:</b></p>
+<pre id="output"></pre>
+
+<script>
+  async function uploadImage() {
+    const file = document.getElementById("imgInput").files[0];
+    if (!file) {
+      alert("Select an image first!");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    const response = await fetch("http://127.0.0.1:5000/parse-image", {
+      method: "POST",
+      body: formData
+    });
+
+    const result = await response.json();
+    document.getElementById("output").textContent = result.text || result.error || "(Nothing returned)";
+    console.log(result);
+
+  }
+</script>
+
+</body>
+</html>
